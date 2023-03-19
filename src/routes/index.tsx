@@ -18,7 +18,7 @@ function RouterSwitch() {
   return (
     <Provider store={store}>
       <Routes>
-        <Route path="/" element={<div>Deu boa!</div>} />
+        <Route path="/" element={<div>Hello World!</div>} />
         <Route path="/health" element={<HealthPage />} />
       </Routes>
     </Provider>
