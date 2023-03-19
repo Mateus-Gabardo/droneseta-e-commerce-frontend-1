@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
+import './custom.scss';
 import RouterSwitch from './routes';
 
 const container = document.getElementById('root')!;
