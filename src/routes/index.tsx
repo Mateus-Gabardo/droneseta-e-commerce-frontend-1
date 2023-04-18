@@ -1,5 +1,6 @@
 import { Provider } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import HealthPage from '../pages/health';
 import Layout from '../shared/components/Layout';
 import store from '../store';
@@ -22,6 +23,7 @@ function RouterSwitch() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
       </Routes>
+      <Toaster toastOptions={{ duration: 5000, position: 'bottom-left' }} />
     </Provider>
   );
 }

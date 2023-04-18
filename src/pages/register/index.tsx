@@ -1,10 +1,18 @@
 import { useFormik } from 'formik';
 import { Button, Container, Form, Row } from 'react-bootstrap';
 import { object, string } from 'yup';
-import { mask } from '../../utils/mask';
+import { toast } from 'react-hot-toast';
+import { cpf } from 'cpf-cnpj-validator';
+import { useNavigate } from 'react-router-dom';
+import { useGetRegister } from '../../store/hooks/customerHooks';
+import { removeMask } from '../../utils/removeMask';
 
 function RegisterPage() {
   const REQUIRED = 'Campo obrigatório!';
+
+  const getRegister = useGetRegister();
+
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -15,7 +23,31 @@ function RegisterPage() {
     },
     enableReinitialize: true,
     onSubmit: (values) => {
-      console.log(values);
+      if (values.senha !== values.repetirSenha) {
+        toast.error('As duas senhas precisam ser iguais!');
+        return;
+      }
+      if (!cpf.isValid(values.cpf)) {
+        toast.error('O CPF precisa ser válido!');
+        return;
+      }
+      if (values.senha.length < 8) {
+        toast.error('A senha precisa conter 8 caracteres!');
+        return;
+      }
+      try {
+        getRegister({
+          nome: values.nome,
+          cpf: removeMask(values.cpf),
+          senha: values.senha,
+        });
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error('Dados inválidos!');
+        }
+        return;
+      }
+      navigate('/login');
     },
     validationSchema: object().shape({
       nome: string().required(REQUIRED),
@@ -64,7 +96,7 @@ function RegisterPage() {
             maxLength={14}
             value={values.cpf}
             onChange={(event) => {
-              event.target.value = mask(event.target.value);
+              event.target.value = cpf.format(event.target.value);
               handleChange(event);
             }}
           />
@@ -104,7 +136,11 @@ function RegisterPage() {
           <Button variant="success" type="submit">
             Registrar
           </Button>
-          <Button variant="primary" className="mt-3">
+          <Button
+            variant="primary"
+            className="mt-3"
+            onClick={() => navigate('/login')}
+          >
             Login
           </Button>
         </Row>

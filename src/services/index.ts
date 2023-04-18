@@ -16,3 +16,16 @@ export const postRegister = async (
   );
   return response;
 };
+
+export const postLogin = async (cpf: string, senha: string) => {
+  const url = 'http://localhost:8080/cliente/login';
+  const headers = { 'content-type': 'application/json' };
+  const response = await requestService(
+    url,
+    { cpf, senha },
+    headers,
+    false,
+    'POST'
+  );
+  return response;
+};

@@ -1,10 +1,18 @@
+import { cpf } from 'cpf-cnpj-validator';
 import { useFormik } from 'formik';
 import { Button, Container, Form, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
-import { mask } from '../../utils/mask';
+import { toast } from 'react-hot-toast';
+import { useGetLogin } from '../../store/hooks/customerHooks';
+import { removeMask } from '../../utils/removeMask';
 
 function LoginPage() {
   const REQUIRED = 'Campo obrigatório!';
+
+  const getLogin = useGetLogin();
+
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -13,7 +21,18 @@ function LoginPage() {
     },
     enableReinitialize: true,
     onSubmit: (values) => {
-      console.log(values);
+      const login = getLogin({
+        cpf: removeMask(values.cpf),
+        senha: values.senha,
+      });
+      toast.promise(login, {
+        loading: 'Realizando login...',
+        error: (error) => error.message,
+        success: () => {
+          navigate('/');
+          return 'Login realizado com sucesso';
+        },
+      });
     },
     validationSchema: object().shape({
       cpf: string().required(REQUIRED),
@@ -47,7 +66,7 @@ function LoginPage() {
             maxLength={14}
             value={values.cpf}
             onChange={(event) => {
-              event.target.value = mask(event.target.value);
+              event.target.value = cpf.format(event.target.value);
               handleChange(event);
             }}
           />
@@ -72,7 +91,11 @@ function LoginPage() {
           <Button variant="primary" type="submit">
             Logar
           </Button>
-          <Button variant="dark" className="mt-3">
+          <Button
+            variant="dark"
+            className="mt-3"
+            onClick={() => navigate('/register')}
+          >
             Registrar
           </Button>
         </Row>
