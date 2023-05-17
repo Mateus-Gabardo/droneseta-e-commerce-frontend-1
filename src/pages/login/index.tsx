@@ -4,15 +4,16 @@ import { Button, Container, Form, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 import { toast } from 'react-hot-toast';
+import { useEffect } from 'react';
 import { useGetLogin } from '../../store/hooks/customerHooks';
 import { removeMask } from '../../utils/removeMask';
+import { useClearSession } from '../../store/hooks/sessionHooks';
 
 function LoginPage() {
   const REQUIRED = 'Campo obrigatório!';
-
-  const getLogin = useGetLogin();
-
   const navigate = useNavigate();
+  const getLogin = useGetLogin();
+  const clearSession = useClearSession();
 
   const formik = useFormik({
     initialValues: {
@@ -39,6 +40,10 @@ function LoginPage() {
       senha: string().required(REQUIRED),
     }),
   });
+
+  useEffect(() => {
+    clearSession();
+  }, [clearSession]);
 
   const { values, handleChange, handleSubmit, errors, touched } = formik;
 
@@ -92,7 +97,7 @@ function LoginPage() {
             Logar
           </Button>
           <Button
-            variant="dark"
+            variant="success"
             className="mt-3"
             onClick={() => navigate('/register')}
           >

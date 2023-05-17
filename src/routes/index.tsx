@@ -6,6 +6,7 @@ import Layout from '../shared/components/Layout';
 import store from '../store';
 import RegisterPage from '../pages/register';
 import LoginPage from '../pages/login';
+import HomePage from '../pages/home';
 
 function RouterSwitch() {
   return (
@@ -15,7 +16,7 @@ function RouterSwitch() {
           path="/"
           element={
             <Layout>
-              <div>Hello World!</div>
+              <HomePage />
             </Layout>
           }
         />
