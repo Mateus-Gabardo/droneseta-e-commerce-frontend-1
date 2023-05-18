@@ -1,7 +1,9 @@
 import { Button, Card } from 'react-bootstrap';
 import { currencyFormat } from '../../../utils';
+import { useAddCart } from '../../../store/hooks/sessionHooks';
 
 interface ProductCardProps {
+  id: string;
   name: string;
   image: string;
   description: string;
@@ -10,13 +12,24 @@ interface ProductCardProps {
 }
 
 function ProductCard({
+  id,
   name,
   image,
   description,
   price,
   size,
 }: ProductCardProps) {
-  console.log(`images/${image}`);
+  const addCart = useAddCart();
+
+  const handleAddCart = () => {
+    addCart({
+      id,
+      name,
+      price,
+      quantity: 1,
+    });
+  };
+
   return (
     <Card style={{ width: '280px' }}>
       <Card.Img variant="top" height="300px" src={`images/${image}`} />
@@ -29,7 +42,11 @@ function ProductCard({
           {currencyFormat(price)}
         </Card.Text>
 
-        <Button variant="success" style={{ width: '100%' }}>
+        <Button
+          variant="success"
+          style={{ width: '100%' }}
+          onClick={handleAddCart}
+        >
           Comprar
         </Button>
       </Card.Body>

@@ -2,14 +2,14 @@ import { Customer } from './customer';
 
 export interface Session {
   customer: Customer;
-  cart: Cart[];
+  cart: CartItem[];
 }
 
-export interface Cart {
+export interface CartItem {
   id: string;
   name: string;
   quantity: number;
-  price: string;
+  price: number;
 }
 
 export interface Pageable {

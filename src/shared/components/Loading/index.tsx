@@ -1,13 +1,13 @@
-import { Container } from 'react-bootstrap';
+import { Container, Spinner } from 'react-bootstrap';
 
 function Loading() {
   return (
     <Container
       fluid
-      style={{ height: '100vh', width: '100vw' }}
-      className="justify-content-center align-items-center"
+      style={{ height: '80vh', width: '100vw', position: 'absolute' }}
+      className="d-flex justify-content-center align-items-center"
     >
-      carregando...
+      <Spinner variant="success" style={{ width: '100px', height: '100px' }} />
     </Container>
   );
 }

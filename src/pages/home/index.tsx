@@ -43,6 +43,7 @@ function HomePage() {
         {products &&
           products.content.map((product) => (
             <ProductCard
+              id={product.produtoId}
               key={product.descricao}
               name={product.nome}
               image={product.imagem}

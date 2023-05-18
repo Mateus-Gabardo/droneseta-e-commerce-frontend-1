@@ -1,6 +1,7 @@
 import { Pageable } from '.';
 
 interface Product {
+  produtoId: string;
   nome: string;
   descricao: string;
   preco: number;
