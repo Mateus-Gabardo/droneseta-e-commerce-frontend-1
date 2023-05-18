@@ -4,15 +4,16 @@ import { object, string } from 'yup';
 import { toast } from 'react-hot-toast';
 import { cpf } from 'cpf-cnpj-validator';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useGetRegister } from '../../store/hooks/customerHooks';
 import { removeMask } from '../../utils/removeMask';
+import { useClearSession } from '../../store/hooks/sessionHooks';
 
 function RegisterPage() {
   const REQUIRED = 'Campo obrigatório!';
-
-  const getRegister = useGetRegister();
-
   const navigate = useNavigate();
+  const getRegister = useGetRegister();
+  const clearSession = useClearSession();
 
   const formik = useFormik({
     initialValues: {
@@ -36,18 +37,24 @@ function RegisterPage() {
         return;
       }
       try {
-        getRegister({
+        const register = getRegister({
           nome: values.nome,
           cpf: removeMask(values.cpf),
           senha: values.senha,
+        });
+        toast.promise(register, {
+          loading: 'Registrando...',
+          error: (error) => error.message,
+          success: () => {
+            navigate('/');
+            return 'Cadastro realizado com sucesso!';
+          },
         });
       } catch (error) {
         if (error instanceof Error) {
           toast.error('Dados inválidos!');
         }
-        return;
       }
-      navigate('/login');
     },
     validationSchema: object().shape({
       nome: string().required(REQUIRED),
@@ -56,6 +63,10 @@ function RegisterPage() {
       repetirSenha: string().required(REQUIRED),
     }),
   });
+
+  useEffect(() => {
+    clearSession();
+  }, [clearSession]);
 
   const { values, handleChange, handleSubmit, errors, touched } = formik;
 

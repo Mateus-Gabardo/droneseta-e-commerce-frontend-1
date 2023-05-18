@@ -1,4 +1,4 @@
-import { requestService } from '../utils/requestService';
+import { requestService } from '../../utils/requestService';
 
 export const postRegister = async (
   nome: string,
