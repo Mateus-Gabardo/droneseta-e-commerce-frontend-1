@@ -32,7 +32,12 @@ function ProductCard({
 
   return (
     <Card style={{ width: '280px' }}>
-      <Card.Img variant="top" height="300px" src={`images/${image}`} />
+      <Card.Img
+        className="p-5"
+        variant="top"
+        height="300px"
+        src={`images/${image}`}
+      />
       <Card.Body className="d-flex flex-column ">
         <Card.Title>
           {name} - {size}
