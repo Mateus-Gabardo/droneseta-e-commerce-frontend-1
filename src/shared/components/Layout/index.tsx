@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import HeaderComponent from '../Header';
 import { useSession } from '../../../store/hooks/sessionHooks';
 

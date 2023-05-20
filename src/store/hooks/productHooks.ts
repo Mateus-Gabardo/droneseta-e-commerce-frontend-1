@@ -5,6 +5,7 @@ import * as productActions from '../product/productAction';
 import {
   requestCreateProduct,
   requestDeleteProduct,
+  requestGetBestSellers,
   requestGetProducts,
 } from '../../services/product';
 import { Product } from '../../shared/@types/product';
@@ -27,3 +28,14 @@ export const useDeleteProduct = () =>
 
 export const usePostProduct = () =>
   useCallback(async (product: Product) => requestCreateProduct(product), []);
+
+export const useBestSellers = () => useProductState().bestSellers;
+
+export const useGetBestSellers = () => {
+  const dispatch = useDispatch();
+
+  return useCallback(async () => {
+    const result = await requestGetBestSellers();
+    dispatch(productActions.getBestSellers(result));
+  }, [dispatch]);
+};

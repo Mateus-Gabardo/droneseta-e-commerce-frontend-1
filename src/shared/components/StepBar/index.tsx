@@ -16,7 +16,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBox, faClock, faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
 import DroneStep from "../../images/drone-step.png";
 
-function StepBar() {
+interface StepBarProps {
+  step: number;
+}
+
+function StepBar({step}: StepBarProps) {
   const steps = [
     'Pagamento confirmado',
     'Aguardando envio',
@@ -94,7 +98,7 @@ function StepBar() {
 
   return (
     <Box >
-    <Stepper alternativeLabel activeStep={2} connector={<ColorlibConnector />}>
+    <Stepper alternativeLabel activeStep={step} connector={<ColorlibConnector />}>
       {steps.map((label) => (
         <Step key={label}>
           <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>

@@ -1,7 +1,7 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Container, Row, Table } from 'react-bootstrap';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
@@ -16,6 +16,7 @@ import {
 } from '../../../../store/hooks/loadingHooks';
 import Loading from '../../../../shared/components/Loading';
 import ProductCreationModal from './ProductCreationModal';
+import { currencyFormat } from '../../../../utils';
 
 function ProductsTab() {
   const [show, setShow] = useState(false);
@@ -49,7 +50,7 @@ function ProductsTab() {
     const deleteProduct = deleteproduct(productId);
     toast.promise(deleteProduct, {
       error: 'Falha ao excluir pedido!',
-      pending: 'Excluindo produto...',
+      loading: 'Excluindo produto...',
       success: 'Pedido excluido com sucesso!',
     });
     deleteProduct.finally(() => {
@@ -81,6 +82,7 @@ function ProductsTab() {
               <th>Descrição</th>
               <th>Imagem</th>
               <th>Tamanho</th>
+              <th>Preço</th>
               <th>Quantidade</th>
               <th>Ação</th>
             </tr>
@@ -95,6 +97,7 @@ function ProductsTab() {
                   <td>{product.descricao}</td>
                   <td>{product.imagem}</td>
                   <td>{product.tamanhoCamiseta}</td>
+                  <td>{currencyFormat(product.preco)}</td>
                   <td>{product.quantidade}x</td>
                   <td>
                     <Button

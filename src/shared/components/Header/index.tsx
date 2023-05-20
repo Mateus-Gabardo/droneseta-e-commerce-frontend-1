@@ -1,15 +1,26 @@
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../images/entrega-drone.png';
 import Cart from '../Cart';
 import TopSlide from '../../animations/TopSlide';
+import { useSession } from '../../../store/hooks/sessionHooks';
 
 function HeaderComponent() {
   const navigate = useNavigate();
+  const session = useSession();
 
   const handleNavigateHome = () => {
     navigate('/');
   };
+
+  const handleNavigateOrders = () => {
+    navigate('/orders');
+  };
+
+  const handleNavigateDashboard = () => {
+    navigate('/admin');
+  };
+
   return (
     <Container
       className="d-flex flex-column"
@@ -51,7 +62,31 @@ function HeaderComponent() {
           </Row>
         </Col>
         <Col className="d-flex justify-content-end">
-          <Cart />
+          <Row>
+            {session && session.customer.tipoCliente === 'ADM' && (
+              <Col>
+                <Button
+                  variant="outline-light"
+                  style={{ width: '160px' }}
+                  onClick={handleNavigateDashboard}
+                >
+                  Admin Dashboard
+                </Button>
+              </Col>
+            )}
+            <Col>
+              <Button
+                variant="outline-light"
+                style={{ width: '130px' }}
+                onClick={handleNavigateOrders}
+              >
+                Meus pedidos
+              </Button>
+            </Col>
+            <Col>
+              <Cart />
+            </Col>
+          </Row>
         </Col>
       </Row>
     </Container>
