@@ -1,39 +1,41 @@
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Container, Row, Table } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
 import { useEffect } from 'react';
-import Loading from '../../../../shared/components/Loading';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import {
+  useConfirmOrder,
+  useGetCustomerOrders,
+  useOrders,
+} from '../../store/hooks/orderHooks';
+import { useSession } from '../../store/hooks/sessionHooks';
 import {
   useHideLoading,
   useLoading,
   useShowLoading,
-} from '../../../../store/hooks/loadingHooks';
-import {
-  useConfirmOrder,
-  useGetOrders,
-  useOrders,
-} from '../../../../store/hooks/orderHooks';
+} from '../../store/hooks/loadingHooks';
+import Loading from '../../shared/components/Loading';
 
-function OrdersTab() {
-  const isLoading = useLoading();
+function OrdersPage() {
+  const getCustomerOrders = useGetCustomerOrders();
+  const session = useSession();
   const orders = useOrders();
-  const navigate = useNavigate();
   const showLoading = useShowLoading();
   const hideLoading = useHideLoading();
-  const getOrders = useGetOrders();
+  const navigate = useNavigate();
+  const isLoading = useLoading();
   const confirmOrder = useConfirmOrder();
 
   const fetchOrders = async () => {
     showLoading();
     try {
-      await getOrders();
+      await getCustomerOrders(session?.customer.id ?? '');
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       }
-      navigate('/admin');
+      navigate('/');
     } finally {
       hideLoading();
     }
@@ -51,19 +53,27 @@ function OrdersTab() {
     });
   };
 
+  const handleSelectOrder = (orderId: string) => {
+    navigate(`/order/${orderId}`);
+  };
+
   if (isLoading) {
     return <Loading />;
   }
 
   return (
     <Container fluid>
-      <Row className="mt-4">
+      <Row
+        className="p-3"
+        style={{ fontSize: '24px', color: '#6D8B74', fontWeight: 'bold' }}
+      >
+        Pedidos
+      </Row>
+      <Row className="m-3">
         <Table striped hover>
           <thead>
             <tr>
               <th>ID</th>
-              <th>Nome</th>
-              <th>CPF</th>
               <th>Cartão Crédito</th>
               <th>Status</th>
               <th>Total</th>
@@ -74,10 +84,12 @@ function OrdersTab() {
             {orders &&
               orders.content &&
               orders.content.map((order) => (
-                <tr key={order.pedidoId}>
+                <tr
+                  key={order.pedidoId}
+                  onClick={() => handleSelectOrder(order.pedidoId)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <td>{order.pedidoId}</td>
-                  <td>{order.cliente.nome}</td>
-                  <td>{order.cliente.cpf}</td>
                   <td>{order.cliente.cartaoCredito ?? 'Nenhum'}</td>
                   <td>{order.status}</td>
                   <td>
@@ -103,4 +115,4 @@ function OrdersTab() {
   );
 }
 
-export default OrdersTab;
+export default OrdersPage;

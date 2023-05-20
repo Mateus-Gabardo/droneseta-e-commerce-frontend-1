@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useCallback } from 'react';
 import { RootState } from '../reducers';
 import {
+  requestConfirmOrder,
+  requestGetCustomerOrders,
   requestGetOrder,
   requestGetOrders,
   requestPostOrder,
@@ -34,6 +36,21 @@ export const useGetOrder = () => {
     async (orderId: string) => {
       const result = await requestGetOrder(orderId);
       dispatch(orderActions.getOrder(result));
+    },
+    [dispatch]
+  );
+};
+
+export const useConfirmOrder = () =>
+  useCallback((orderId: string) => requestConfirmOrder(orderId), []);
+
+export const useGetCustomerOrders = () => {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    async (customerId: string) => {
+      const result = await requestGetCustomerOrders(customerId);
+      dispatch(orderActions.getOrders(result));
     },
     [dispatch]
   );

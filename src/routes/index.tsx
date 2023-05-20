@@ -9,6 +9,7 @@ import HomePage from '../pages/home';
 
 import OrderPage from '../pages/order';
 import AdminPage from '../pages/admin';
+import OrdersPage from '../pages/orders';
 
 function RouterSwitch() {
   return (
@@ -19,6 +20,14 @@ function RouterSwitch() {
           element={
             <Layout>
               <OrderPage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <Layout>
+              <OrdersPage />
             </Layout>
           }
         />

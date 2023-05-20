@@ -8,6 +8,8 @@ import Box from '@mui/material/Box';
 import ProductsTab from './products';
 import CustomersTab from './customers';
 import OrdersTab from './orders';
+import TripsTab from './trips';
+import DashboardTab from './dashboard';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -61,10 +63,11 @@ function AdminTabs() {
           <Tab label="Produtos" {...a11yProps(1)} />
           <Tab label="Pedidos" {...a11yProps(2)} />
           <Tab label="Clientes" {...a11yProps(3)} />
+          <Tab label="Viajens" {...a11yProps(4)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        Item One
+        <DashboardTab />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ProductsTab />
@@ -74,6 +77,9 @@ function AdminTabs() {
       </TabPanel>
       <TabPanel value={value} index={3}>
         <CustomersTab />
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        <TripsTab />
       </TabPanel>
     </Box>
   );

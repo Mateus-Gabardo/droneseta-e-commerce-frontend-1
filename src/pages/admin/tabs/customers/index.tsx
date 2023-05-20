@@ -70,7 +70,6 @@ function CustomersTab() {
               <th>CPF</th>
               <th>Cartão Crédito</th>
               <th>Tipo</th>
-              <th>Endereços</th>
               <th>Ação</th>
             </tr>
           </thead>
@@ -84,14 +83,6 @@ function CustomersTab() {
                   <td>{customer.cpf}</td>
                   <td>{customer.cartaoCredito}</td>
                   <td>{customer.tipoCliente}</td>
-                  <td>
-                    {customer.enderecos &&
-                      customer.enderecos.map(
-                        (address) =>
-                          ` ${address.logradouro}
-                           - ${address.numero} ${address.cidade}/${address.estado} ${address.cep}`
-                      )}
-                  </td>
                   <td>
                     <Button
                       onClick={() =>
