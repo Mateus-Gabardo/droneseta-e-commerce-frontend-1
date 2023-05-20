@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import {
   removeLocalParam,
   getLocalParam,
@@ -15,7 +15,6 @@ const useSessionState = () =>
   useSelector((rootState: RootState) => rootState.sessionState);
 
 export const useSession = () => {
-  const dispatch = useDispatch();
   const session: string | null = getLocalParam('session');
   let sessionObject: Session | null = null;
   if (!session) {
@@ -25,10 +24,6 @@ export const useSession = () => {
     sessionObject = JSON.parse(session);
   } catch (error) {
     return null;
-  }
-
-  if (sessionObject) {
-    dispatch(sessionActions.getCart(sessionObject.cart));
   }
 
   return sessionObject;
@@ -46,6 +41,13 @@ export const useClearSession = () =>
   }, []);
 
 export const useCart = () => useSessionState().cart;
+
+export const useGetCart = () => {
+  const dispatch = useDispatch();
+  return useCallback(() => {
+    dispatch(sessionActions.getCart(useSession()?.cart ?? []));
+  }, [dispatch]);
+};
 
 export const useClearCart = () => {
   const dispatch = useDispatch();
@@ -89,6 +91,9 @@ export const useAddCart = () => {
 
     if (sessionObject !== null) {
       if (sessionObject.cart) {
+        if (sessionObject.cart.find((value) => value.id === cart.id)) {
+          return null;
+        }
         sessionObject.cart.push(cart);
         dispatch(sessionActions.getCart(sessionObject.cart));
         toast.success('Item adicionado ao carrinho!');

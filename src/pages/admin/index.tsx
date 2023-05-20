@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Container } from 'react-bootstrap';

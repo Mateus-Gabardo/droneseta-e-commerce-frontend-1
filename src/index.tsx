@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { Toaster } from 'react-hot-toast';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import './custom.scss';
@@ -13,18 +13,7 @@ const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <ToastContainer
-      position="bottom-left"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="light"
-    />
+    <Toaster position="bottom-left" />
     <BrowserRouter>
       <RouterSwitch />
     </BrowserRouter>

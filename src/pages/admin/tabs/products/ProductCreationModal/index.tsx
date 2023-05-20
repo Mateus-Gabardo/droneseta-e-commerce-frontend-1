@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Select from 'react-select';
 import { Product } from '../../../../../shared/@types/product';
 import { usePostProduct } from '../../../../../store/hooks/productHooks';
@@ -44,7 +44,7 @@ function ProductCreationModal({
     const post = postProduct(values);
     toast.promise(post, {
       error: 'Falha ao criar produto.',
-      pending: 'Criando produto...',
+      loading: 'Criando produto...',
       success: 'Produto criado com sucesso!',
     });
     post.finally(() => {
@@ -140,8 +140,9 @@ function ProductCreationModal({
                 <Form.Control
                   min={1}
                   name="preco"
-                  type="number"
+                  type="text"
                   required
+                  max={9999999}
                   value={values.preco}
                   onChange={handleChange}
                   placeholder="50"

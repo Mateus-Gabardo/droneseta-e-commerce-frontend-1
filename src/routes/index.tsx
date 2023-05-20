@@ -15,7 +15,7 @@ function RouterSwitch() {
     <Provider store={store}>
       <Routes>
         <Route
-          path="/order"
+          path="/order/:orderId"
           element={
             <Layout>
               <OrderPage />
