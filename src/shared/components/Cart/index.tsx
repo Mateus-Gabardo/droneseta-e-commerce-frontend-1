@@ -1,15 +1,39 @@
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Badge, Button, Offcanvas, Row, Table } from 'react-bootstrap';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useCart, useRemoveCart } from '../../../store/hooks/sessionHooks';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import {
+  useCart,
+  useClearCart,
+  useGetCart,
+  useRemoveCart,
+  useSession,
+} from '../../../store/hooks/sessionHooks';
 import { currencyFormat } from '../../../utils';
+import { usePostOrder } from '../../../store/hooks/orderHooks';
+import { useAddress, useGetAddress } from '../../../store/hooks/addressHooks';
 
 function Cart() {
-  const cart = useCart();
-  const removeCart = useRemoveCart();
   const [show, setShow] = useState(false);
+  const session = useSession();
+  const cart = useCart();
+  const address = useAddress();
+  const getCart = useGetCart();
+  const getAddress = useGetAddress();
+  const clearCart = useClearCart();
+  const removeCart = useRemoveCart();
+  const postOrder = usePostOrder();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (session) {
+      getCart();
+      getAddress(session.customer.id ?? '');
+    }
+  }, []);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -17,6 +41,32 @@ function Cart() {
   const handleRemoveCartItem = (index: number) => {
     removeCart(index);
   };
+
+  const handleRequestOrder = () => {
+    if (!session || !address) {
+      toast.error('Falha ao buscar dados do cliente.');
+    } else {
+      toast.promise(
+        postOrder({
+          cpf: session.customer.cpf,
+          enderecoId: address.id,
+          produtoId: cart.map((item) => item.id),
+          status: 'AGUARDANDO_ENVIO',
+        }),
+        {
+          loading: 'Criando pedido...',
+          success: (order) => {
+            clearCart();
+            handleClose();
+            navigate(`/order/${order.pedidoId}`);
+            return 'Pedido criado com sucesso!';
+          },
+          error: (error) => error.message,
+        }
+      );
+    }
+  };
+
   return (
     <>
       <Button onClick={handleShow} variant="outline-success">
@@ -61,7 +111,11 @@ function Cart() {
             </tbody>
           </Table>
           <Row className="m-3">
-            <Button variant="success" disabled={cart.length === 0}>
+            <Button
+              variant="success"
+              onClick={handleRequestOrder}
+              disabled={cart.length === 0}
+            >
               Realizar pedido
             </Button>
           </Row>

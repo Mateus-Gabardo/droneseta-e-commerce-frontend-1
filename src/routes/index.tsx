@@ -9,16 +9,25 @@ import HomePage from '../pages/home';
 
 import OrderPage from '../pages/order';
 import AdminPage from '../pages/admin';
+import OrdersPage from '../pages/orders';
 
 function RouterSwitch() {
   return (
     <Provider store={store}>
       <Routes>
         <Route
-          path="/order"
+          path="/order/:orderId"
           element={
             <Layout>
               <OrderPage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <Layout>
+              <OrdersPage />
             </Layout>
           }
         />

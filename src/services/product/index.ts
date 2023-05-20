@@ -34,3 +34,10 @@ export const requestCreateProduct = async (product: Product) => {
   );
   return response;
 };
+
+export const requestGetBestSellers = async () => {
+  const url = 'http://localhost:8080/produto/produtoMaisVendido';
+  const headers = { 'content-type': 'application/json' };
+  const response = await requestService(url, {}, headers, false, 'GET');
+  return response;
+};
