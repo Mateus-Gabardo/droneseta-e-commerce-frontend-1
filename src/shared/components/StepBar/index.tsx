@@ -3,7 +3,7 @@
 /* eslint-disable react/jsx-no-bind */
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import React from "react";
+import React from 'react';
 import StepLabel from '@mui/material/StepLabel';
 import {
   Box,
@@ -13,16 +13,20 @@ import {
   styled,
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBox, faClock, faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
-import DroneStep from "../../images/drone-step.png";
+import {
+  faBox,
+  faClock,
+  faFileInvoiceDollar,
+} from '@fortawesome/free-solid-svg-icons';
+import DroneStep from '../../images/drone-step.png';
 
 interface StepBarProps {
   step: number;
 }
 
-function StepBar({step}: StepBarProps) {
+function StepBar({ step }: StepBarProps) {
   const steps = [
-    'Pagamento confirmado',
+    'Aguardando pagamento',
     'Aguardando envio',
     'O drone saiu para entrega',
     'Entrega realizada',
@@ -88,23 +92,24 @@ function StepBar({step}: StepBarProps) {
         ownerState={{ completed, active }}
         className={className}
       >
-        {
-
-        icons[String(props.icon)]
-        }
+        {icons[String(props.icon)]}
       </ColorlibStepIconRoot>
     );
   }
 
   return (
-    <Box >
-    <Stepper alternativeLabel activeStep={step} connector={<ColorlibConnector />}>
-      {steps.map((label) => (
-        <Step key={label}>
-          <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
-        </Step>
-      ))}
-    </Stepper>
+    <Box>
+      <Stepper
+        alternativeLabel
+        activeStep={step}
+        connector={<ColorlibConnector />}
+      >
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
     </Box>
   );
 }

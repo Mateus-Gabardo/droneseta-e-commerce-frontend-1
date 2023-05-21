@@ -1,14 +1,8 @@
-import { Button, Container, Row, Table } from 'react-bootstrap';
+import { Container, Row, Table } from 'react-bootstrap';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import {
-  useConfirmOrder,
-  useGetCustomerOrders,
-  useOrders,
-} from '../../store/hooks/orderHooks';
+import { useGetCustomerOrders, useOrders } from '../../store/hooks/orderHooks';
 import { useSession } from '../../store/hooks/sessionHooks';
 import {
   useHideLoading,
@@ -16,6 +10,7 @@ import {
   useShowLoading,
 } from '../../store/hooks/loadingHooks';
 import Loading from '../../shared/components/Loading';
+import { currencyFormat } from '../../utils';
 
 function OrdersPage() {
   const getCustomerOrders = useGetCustomerOrders();
@@ -25,7 +20,6 @@ function OrdersPage() {
   const hideLoading = useHideLoading();
   const navigate = useNavigate();
   const isLoading = useLoading();
-  const confirmOrder = useConfirmOrder();
 
   const fetchOrders = async () => {
     showLoading();
@@ -44,14 +38,6 @@ function OrdersPage() {
   useEffect(() => {
     fetchOrders();
   }, []);
-
-  const handleConfirmOrder = (orderId: string) => {
-    toast.promise(confirmOrder(orderId), {
-      loading: 'Confirmando pagamento...',
-      success: 'Pagamento confirmado com sucesso!',
-      error: (error) => error.message,
-    });
-  };
 
   const handleSelectOrder = (orderId: string) => {
     navigate(`/order/${orderId}`);
@@ -77,7 +63,6 @@ function OrdersPage() {
               <th>Cartão Crédito</th>
               <th>Status</th>
               <th>Total</th>
-              <th>Ação</th>
             </tr>
           </thead>
           <tbody>
@@ -93,18 +78,11 @@ function OrdersPage() {
                   <td>{order.cliente.cartaoCredito ?? 'Nenhum'}</td>
                   <td>{order.status}</td>
                   <td>
-                    {order.produtos
-                      .map((product) => product.preco)
-                      .reduce((a, b) => a + b)}
-                  </td>
-                  <td>
-                    <Button
-                      onClick={() => handleConfirmOrder(order.pedidoId)}
-                      size="sm"
-                      variant="primary"
-                    >
-                      <FontAwesomeIcon icon={faCheck} /> Confirmar pedido
-                    </Button>
+                    {currencyFormat(
+                      order.produtos
+                        .map((product) => product.preco)
+                        .reduce((a, b) => a + b)
+                    )}
                   </td>
                 </tr>
               ))}
