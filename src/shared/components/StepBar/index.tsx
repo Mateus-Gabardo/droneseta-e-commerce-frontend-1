@@ -26,7 +26,7 @@ interface StepBarProps {
 
 function StepBar({ step }: StepBarProps) {
   const steps = [
-    'Pagamento confirmado',
+    'Aguardando pagamento',
     'Aguardando envio',
     'O drone saiu para entrega',
     'Entrega realizada',
